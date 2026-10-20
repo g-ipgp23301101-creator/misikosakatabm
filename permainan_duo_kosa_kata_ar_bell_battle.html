@@ -1,0 +1,1047 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DUO KOSA KATA: AR BELL BATTLE</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emeraldDark: '#07140e',
+                        emeraldMain: '#0b3d26',
+                        emeraldLight: '#0e5233',
+                        royalGold: '#dfb235',
+                        royalGoldBright: '#ffd700',
+                        neonGreen: '#00ffaa',
+                        softCream: '#f7f3e8',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles for Futuristic Malay Visuals & Hologram Effects */
+        body {
+            background-color: #07140e;
+            color: #f7f3e8;
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(11, 61, 38, 0.4) 0%, rgba(7, 20, 14, 0.95) 100%),
+                repeating-linear-gradient(45deg, rgba(223, 178, 53, 0.03) 0, rgba(223, 178, 53, 0.03) 10px, transparent 10px, transparent 20px);
+            user-select: none;
+            touch-action: manipulation;
+            overflow-x: hidden;
+        }
+
+        /* Gold Border Frame with Malay Traditional Outline Vibe */
+        .malay-gold-border {
+            border: 2px solid #dfb235;
+            box-shadow: 0 0 15px rgba(223, 178, 53, 0.3), inset 0 0 15px rgba(223, 178, 53, 0.2);
+            position: relative;
+        }
+        .malay-gold-border::before, .malay-gold-border::after {
+            content: "◆";
+            position: absolute;
+            color: #ffd700;
+            font-size: 14px;
+            top: -10px;
+            text-shadow: 0 0 8px #ffd700;
+        }
+        .malay-gold-border::before { left: 10px; }
+        .malay-gold-border::after { right: 10px; }
+
+        /* Hologram Card & Scanlines */
+        .holo-card {
+            background: rgba(11, 61, 38, 0.55);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 255, 170, 0.4);
+            box-shadow: 0 0 25px rgba(0, 255, 170, 0.15), inset 0 0 15px rgba(0, 255, 170, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 255, 170, 0.08) 51%, transparent 51%);
+            background-size: 100% 8px;
+            pointer-events: none;
+        }
+        .scan-laser {
+            position: absolute;
+            top: -100%; left: 0; width: 100%; height: 30%;
+            background: linear-gradient(to bottom, transparent, rgba(0, 255, 170, 0.3), transparent);
+            animation: scanLaser 4s infinite linear;
+            pointer-events: none;
+        }
+        @keyframes scanLaser {
+            0% { top: -30%; }
+            100% { top: 130%; }
+        }
+
+        /* 3D AR Floating Words */
+        .ar-word-floating {
+            animation: float3D 4s ease-in-out infinite alternate;
+            text-shadow: 0 0 15px #00ffaa, 0 0 30px #00ffaa, 0 0 45px #dfb235;
+            letter-spacing: 4px;
+        }
+        @keyframes float3D {
+            0% { transform: translateY(0px) rotateX(5deg) scale(1); }
+            100% { transform: translateY(-12px) rotateX(-5deg) scale(1.03); }
+        }
+
+        /* Pulse Animation for Bell & Timer */
+        .pulse-gold {
+            animation: pulseGold 1.5s infinite;
+        }
+        @keyframes pulseGold {
+            0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); }
+            50% { box-shadow: 0 0 35px rgba(255, 215, 0, 0.9); }
+        }
+
+        .shake-error {
+            animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both;
+        }
+        @keyframes shake {
+            10%, 90% { transform: translate3d(-2px, 0, 0); }
+            20%, 80% { transform: translate3d(4px, 0, 0); }
+            30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+            40%, 60% { transform: translate3d(6px, 0, 0); }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #07140e; }
+        ::-webkit-scrollbar-thumb { background: #dfb235; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between font-sans leading-relaxed text-softCream">
+
+    <!-- TOP HEADER / CONTROL BAR -->
+    <header class="w-full bg-emeraldDark/90 border-b border-royalGold/40 p-3 px-6 flex justify-between items-center z-50 shadow-lg">
+        <div class="flex items-center space-x-3">
+            <div class="w-9 h-9 rounded-full bg-royalGold/20 border border-royalGold flex items-center justify-center text-royalGoldBright font-bold">
+                ❖
+            </div>
+            <div>
+                <h1 class="text-lg md:text-xl font-bold tracking-wider text-royalGoldBright">DUO KOSA KATA</h1>
+                <p class="text-xs text-neonGreen font-mono">AR BELL BATTLE • KELAB BAHASA MELAYU</p>
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-3">
+            <!-- Audio Toggle -->
+            <button id="btnAudioToggle" onclick="toggleAudio()" class="px-3 py-1.5 rounded-lg border border-royalGold/50 bg-emeraldMain/60 text-xs font-semibold hover:bg-royalGold/20 transition flex items-center gap-1">
+                <span id="audioIcon">🔊</span> <span id="audioText">AUDIO: ON</span>
+            </button>
+            <!-- Speech Toggle -->
+            <button id="btnSpeechToggle" onclick="toggleSpeech()" class="px-3 py-1.5 rounded-lg border border-neonGreen/50 bg-emeraldMain/60 text-xs font-semibold text-neonGreen hover:bg-neonGreen/20 transition">
+                🗣️ <span id="speechText">SUARA: ON</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-grow flex flex-col justify-center items-center p-4 md:p-6 max-w-7xl mx-auto w-full relative">
+
+        <!-- ================= SKRIN 1: PEMBUKAAN ================= -->
+        <section id="screenLanding" class="w-full max-w-4xl text-center py-8 flex flex-col items-center">
+            <div class="holo-card malay-gold-border p-8 md:p-12 rounded-2xl w-full relative">
+                <div class="scanline"></div>
+                <div class="scan-laser"></div>
+
+                <!-- Floating Hologram Decorative Header -->
+                <div class="mb-4 text-neonGreen text-sm tracking-widest uppercase font-mono animate-pulse">
+                    [ PERTANDINGAN INTERAKTIF AR HOLOGRAM ]
+                </div>
+
+                <h1 class="text-4xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-royalGoldBright via-softCream to-royalGold mb-2 tracking-wide">
+                    DUO KOSA KATA
+                </h1>
+                <h2 class="text-2xl md:text-3xl font-extrabold text-neonGreen mb-4 tracking-wider">
+                    AR BELL BATTLE
+                </h2>
+                <p class="text-lg md:text-xl italic text-softCream/90 mb-8 font-serif">
+                    “Bijak Berbahasa, Pantas Berfikir!”
+                </p>
+
+                <!-- AR Hologram Word Showcase -->
+                <div class="my-6 p-6 rounded-xl bg-emeraldDark/80 border border-royalGold/30 relative overflow-hidden">
+                    <p class="text-xs text-royalGold uppercase mb-2 tracking-widest">IMBASAN KOSA KATA SASARAN</p>
+                    <div id="landingFloatingWord" class="ar-word-floating text-3xl md:text-5xl font-black text-neonGreen">
+                        MARCAPADA
+                    </div>
+                </div>
+
+                <!-- Bell Icon Graphic -->
+                <div class="my-6 flex justify-center">
+                    <div class="w-20 h-20 rounded-full bg-royalGold/10 border-2 border-royalGold flex items-center justify-center pulse-gold">
+                        <span class="text-4xl">🔔</span>
+                    </div>
+                </div>
+
+                <button onclick="startGame()" class="w-full max-w-md py-4 rounded-xl text-xl font-bold text-emeraldDark bg-gradient-to-r from-royalGold to-royalGoldBright hover:from-royalGoldBright hover:to-yellow-300 shadow-lg transform hover:scale-105 active:scale-95 transition">
+                    🚀 MULA MISI
+                </button>
+            </div>
+        </section>
+
+
+        <!-- ================= SKRIN 2: PERTANDINGAN (MAIN ARENA) ================= -->
+        <section id="screenGame" class="hidden w-full flex-col gap-6">
+
+            <!-- SCOREBOARD BAR -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+                <!-- Team A Score -->
+                <div class="holo-card p-4 rounded-xl border-l-4 border-neonGreen text-left relative">
+                    <span class="text-xs text-neonGreen font-bold tracking-wider">PASUKAN A (HIJAU ZAMRUD)</span>
+                    <div id="scoreA" class="text-3xl md:text-4xl font-black text-softCream">0</div>
+                    <div class="text-[10px] text-softCream/60">MATA KUMPULAN</div>
+                </div>
+
+                <!-- Game Status & Progress -->
+                <div class="holo-card p-4 rounded-xl text-center border-t-2 border-royalGold">
+                    <span class="text-xs text-royalGold font-bold">SOALAN DIJAWAB</span>
+                    <div class="text-2xl font-bold text-softCream"><span id="questionsAnsweredCount">0</span> / 30</div>
+                    <div class="text-[11px] text-neonGreen font-mono mt-0.5" id="currentMissionTag">MISI: WADAH</div>
+                </div>
+
+                <!-- Timer -->
+                <div class="holo-card p-4 rounded-xl text-center border-t-2 border-royalGold">
+                    <span class="text-xs text-royalGold font-bold">PEMA SA</span>
+                    <div id="timerDisplay" class="text-3xl md:text-4xl font-black text-royalGoldBright font-mono">10s</div>
+                    <div class="text-[10px] text-softCream/60" id="timerStatusLabel">MENUNGGU REBUTAN</div>
+                </div>
+
+                <!-- Team B Score -->
+                <div class="holo-card p-4 rounded-xl border-r-4 border-royalGold text-right relative">
+                    <span class="text-xs text-royalGold font-bold tracking-wider">PASUKAN B (EMAS DIRAJA)</span>
+                    <div id="scoreB" class="text-3xl md:text-4xl font-black text-softCream">0</div>
+                    <div class="text-[10px] text-softCream/60">MATA KUMPULAN</div>
+                </div>
+            </div>
+
+            <!-- AR HOLOGRAM QUESTION PANEL -->
+            <div id="questionPanel" class="holo-card malay-gold-border p-6 md:p-8 rounded-2xl relative w-full flex flex-col justify-between min-h-[360px]">
+                <div class="scanline"></div>
+                <div class="scan-laser"></div>
+
+                <!-- AR Word Floating Banner -->
+                <div class="flex justify-between items-center border-b border-royalGold/30 pb-3 mb-4">
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded bg-royalGold/20 border border-royalGold text-royalGold text-xs font-bold" id="badgeDifficulty">SEDERHANA</span>
+                        <span class="text-xs font-mono text-neonGreen uppercase tracking-widest" id="badgeTargetWord">SASARAN: WADAH</span>
+                    </div>
+                    <div id="arScanStatus" class="text-xs text-neonGreen font-mono animate-pulse">
+                        [ SYSTEM READY ]
+                    </div>
+                </div>
+
+                <!-- Main Question Text -->
+                <div class="my-auto py-2">
+                    <h3 id="questionText" class="text-xl md:text-2xl font-semibold text-softCream text-center leading-relaxed">
+                        Sila tekan "SOALAN SETERUSNYA" untuk memulakan soalan pusingan ini.
+                    </h3>
+                </div>
+
+                <!-- Options Grid -->
+                <div id="optionsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                    <!-- Dynamic Options Inserted Here -->
+                </div>
+
+                <!-- Explanation Panel (Hidden initially) -->
+                <div id="explanationBox" class="hidden mt-4 p-4 rounded-xl bg-emeraldDark/90 border border-neonGreen/60 text-left">
+                    <div class="text-xs text-neonGreen font-bold uppercase tracking-wider mb-1">💡 PENERANGAN JAWAPAN:</div>
+                    <div id="explanationText" class="text-sm text-softCream/90"></div>
+                </div>
+            </div>
+
+            <!-- TEACHER CONTROL & BELL REBUTAN PANEL -->
+            <div class="holo-card p-5 rounded-2xl border border-royalGold/40 flex flex-col gap-4">
+                <div class="text-center text-xs font-bold text-royalGold tracking-widest uppercase">
+                    ⚙️ PANEL KAWALAN GURU & REBUTAN LOCENG FIZIKAL
+                </div>
+
+                <!-- Instructions / Status Announcement -->
+                <div id="gameStatusNotice" class="text-center text-lg font-bold text-neonGreen py-1 bg-emeraldDark/60 rounded-lg border border-neonGreen/30">
+                    TEKAN "SOALAN SETERUSNYA" UNTUK MEMULAKAN
+                </div>
+
+                <!-- Teacher Bell Winner Selection Buttons -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <button id="btnBellA" onclick="registerBellWinner('A')" disabled class="py-3.5 px-4 rounded-xl text-emeraldDark bg-neonGreen font-bold hover:bg-emerald-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition flex items-center justify-center gap-2">
+                        🔔 PASUKAN A MENANG LOCENG
+                    </button>
+                    <button id="btnBellB" onclick="registerBellWinner('B')" disabled class="py-3.5 px-4 rounded-xl text-emeraldDark bg-royalGoldBright font-bold hover:bg-yellow-300 disabled:opacity-40 disabled:cursor-not-allowed shadow-md transition flex items-center justify-center gap-2">
+                        🔔 PASUKAN B MENANG LOCENG
+                    </button>
+                </div>
+
+                <!-- Main Flow Action Controls -->
+                <div class="flex flex-wrap gap-2 justify-center pt-2 border-t border-royalGold/20">
+                    <button id="btnNextQuestion" onclick="loadNextQuestion()" class="px-5 py-2.5 rounded-lg bg-emeraldMain border border-royalGold text-royalGoldBright font-bold hover:bg-emeraldLight transition text-sm">
+                        ➡️ SOALAN SETERUSNYA
+                    </button>
+
+                    <button id="btnOpponentTry" onclick="allowOpponentTry()" disabled class="px-4 py-2.5 rounded-lg bg-amber-600/80 border border-amber-400 text-white font-bold hover:bg-amber-600 disabled:opacity-30 disabled:cursor-not-allowed transition text-sm">
+                        ⚡ PASUKAN LAWAN CUBA!
+                    </button>
+
+                    <button onclick="confirmShowAnswer()" class="px-4 py-2.5 rounded-lg bg-emeraldDark border border-softCream/40 text-softCream/80 font-semibold hover:bg-emeraldMain transition text-sm">
+                        👁️ PAPAR JAWAPAN
+                    </button>
+
+                    <button onclick="confirmResetRound()" class="px-4 py-2.5 rounded-lg bg-emeraldDark border border-softCream/40 text-softCream/80 font-semibold hover:bg-emeraldMain transition text-sm">
+                        🔄 ULANG PUSINGAN
+                    </button>
+
+                    <button onclick="confirmEndGame()" class="px-4 py-2.5 rounded-lg bg-red-950/80 border border-red-500/50 text-red-200 font-semibold hover:bg-red-900 transition text-sm">
+                        🏁 TAMATKAN PERMAINAN
+                    </button>
+                </div>
+            </div>
+
+            <!-- MISSION CATEGORIES SELECTION -->
+            <div class="holo-card p-4 rounded-xl border border-royalGold/30">
+                <div class="flex justify-between items-center mb-3">
+                    <span class="text-xs font-bold text-royalGold uppercase tracking-wider">PILIHAN KATEGORI MISI</span>
+                    <button onclick="selectRandomMission()" class="px-3 py-1 rounded bg-royalGold/20 border border-royalGold text-xs text-royalGoldBright font-bold hover:bg-royalGold/40 transition">
+                        🎲 MISI RAWAK
+                    </button>
+                </div>
+                <div id="missionGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                    <!-- Mission cards dynamically generated -->
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ================= SKRIN 3: KEPUTUSAN AKHIR ================= -->
+        <section id="screenEnd" class="hidden w-full max-w-3xl text-center py-6">
+            <div class="holo-card malay-gold-border p-8 md:p-12 rounded-2xl w-full relative">
+                <div class="scanline"></div>
+
+                <div class="text-neonGreen text-sm tracking-widest uppercase font-mono mb-2">
+                    [ KEPUTUSAN MUKTAMAD PERTANDINGAN ]
+                </div>
+                <h1 class="text-4xl md:text-5xl font-black text-royalGoldBright mb-6">
+                    MISI SELESAI!
+                </h1>
+
+                <!-- Trophy Graphic -->
+                <div class="my-4 flex justify-center">
+                    <div class="w-24 h-24 rounded-full bg-royalGold/20 border-2 border-royalGoldBright flex items-center justify-center pulse-gold text-5xl">
+                        🏆
+                    </div>
+                </div>
+
+                <!-- Winner Announcement Banner -->
+                <div id="winnerText" class="text-2xl md:text-3xl font-extrabold text-neonGreen my-4 p-4 rounded-xl bg-emeraldDark border border-neonGreen/50">
+                    TAHNIAH, PASUKAN A!
+                </div>
+
+                <!-- Final Stats Breakdown -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 my-6 text-left">
+                    <div class="p-3 rounded-lg bg-emeraldDark/80 border border-neonGreen/40">
+                        <div class="text-[10px] text-neonGreen uppercase">Mata Pasukan A</div>
+                        <div id="finalScoreA" class="text-2xl font-bold text-softCream">0</div>
+                    </div>
+                    <div class="p-3 rounded-lg bg-emeraldDark/80 border border-royalGold/40">
+                        <div class="text-[10px] text-royalGold uppercase">Mata Pasukan B</div>
+                        <div id="finalScoreB" class="text-2xl font-bold text-softCream">0</div>
+                    </div>
+                    <div class="p-3 rounded-lg bg-emeraldDark/80 border border-softCream/40">
+                        <div class="text-[10px] text-softCream/70 uppercase">Soalan Dijawab</div>
+                        <div id="finalQuestionsCount" class="text-2xl font-bold text-softCream">0</div>
+                    </div>
+                    <div class="p-3 rounded-lg bg-emeraldDark/80 border border-softCream/40">
+                        <div class="text-[10px] text-softCream/70 uppercase">Jawapan Tepat</div>
+                        <div id="finalCorrectCount" class="text-2xl font-bold text-softCream">0</div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center mt-8">
+                    <button onclick="resetGame()" class="py-3 px-8 rounded-xl font-bold text-emeraldDark bg-royalGoldBright hover:bg-yellow-300 transition shadow-lg">
+                        🔄 MAIN SEMULA
+                    </button>
+                    <button onclick="goToHome()" class="py-3 px-8 rounded-xl font-bold text-softCream bg-emeraldMain border border-royalGold/60 hover:bg-emeraldLight transition">
+                        🏠 KELUAR KE MENU UTAMA
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="w-full text-center p-3 text-xs text-softCream/50 border-t border-royalGold/20 bg-emeraldDark/80">
+        DUO KOSA KATA: AR BELL BATTLE • Dibina untuk Aktiviti Kelab Bahasa Melayu Sekolah Rendah
+    </footer>
+
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        /* -------------------------------------------------------------------------
+         * BAHAGIAN 1: DATA BANK 30 SOALAN LENGKAP
+         * ------------------------------------------------------------------------- */
+        const QUESTION_BANK = [
+            // Misi 1 — WADAH
+            { id: 1, mission: "WADAH", word: "WADAH", difficulty: "MUDAH", text: "Apakah maksud perkataan wadah?", options: ["Tempat untuk menyimpan sesuatu barang.", "Alat atau saluran untuk menyampaikan sesuatu.", "Kaedah untuk menyelesaikan sesuatu masalah.", "Tempat untuk menjalankan sesuatu aktiviti."], correctIndex: 1, explanation: "Wadah bermaksud alat, saluran atau medium untuk menyampaikan sesuatu seperti maklumat atau idea." },
+            { id: 2, mission: "WADAH", word: "WADAH", difficulty: "SEDERHANA", text: "Yang manakah merupakan contoh wadah penyampaian maklumat?", options: ["Sebuah bakul untuk mengumpulkan buku.", "Sebuah bilik untuk menyimpan peralatan.", "Sebuah stor untuk menyimpan barangan sekolah.", "Surat khabar yang menyampaikan berita kepada masyarakat."], correctIndex: 3, explanation: "Surat khabar berfungsi sebagai saluran (wadah) untuk menyampaikan maklumat kepada awam." },
+            { id: 3, mission: "WADAH", word: "WADAH", difficulty: "SEDERHANA", text: "Pilih ayat yang menggunakan perkataan wadah dengan betul.", options: ["Pertandingan pidato menjadi wadah untuk murid menyuarakan pendapat.", "Ibu menggunakan wadah untuk mengira jumlah wang simpanannya.", "Murid menggunakan wadah untuk mengukur panjang meja.", "Ayah membeli wadah supaya dapat berlari dengan lebih pantas."], correctIndex: 0, explanation: "Pertandingan pidato ialah saluran/medium (wadah) murid meluahkan fikiran." },
+            { id: 4, mission: "WADAH", word: "WADAH", difficulty: "MUDAH", text: "Lengkapkan ayat berikut: Media sosial merupakan ______ untuk menyampaikan maklumat kepada masyarakat.", options: ["cabaran", "halangan", "wadah", "ukuran"], correctIndex: 2, explanation: "Media sosial ialah medium/wadah penyampaian maklumat moden." },
+            { id: 5, mission: "WADAH", word: "WADAH", difficulty: "SUKAR", text: "Mengapakah pertandingan pidato boleh dianggap sebagai wadah?", options: ["Kerana pertandingan pidato menghalang murid daripada bercakap.", "Kerana pertandingan pidato memberi peluang kepada murid menyampaikan pendapat.", "Kerana pertandingan pidato hanya menguji kebolehan murid menghafal.", "Kerana pertandingan pidato digunakan untuk menyimpan bahan bacaan."], correctIndex: 1, explanation: "Ia memberi ruang dan saluran kepada murid menyuarakan pandangan mereka." },
+
+            // Misi 2 — MAMPAN
+            { id: 6, mission: "MAMPAN", word: "MAMPAN", difficulty: "MUDAH", text: "Apakah maksud perkataan mampan?", options: ["Sesuatu yang dapat dilakukan dengan sangat cepat.", "Sesuatu yang hanya memberikan manfaat dalam masa singkat.", "Sesuatu yang sukar dilakukan tanpa bantuan orang lain.", "Sesuatu yang dapat dikekalkan untuk tempoh yang panjang."], correctIndex: 3, explanation: "Mampan bermaksud berkekalan, stabil, dan dapat dipelihara berterusan." },
+            { id: 7, mission: "MAMPAN", word: "MAMPAN", difficulty: "SEDERHANA", text: "Yang manakah menunjukkan amalan yang mampan?", options: ["Menggunakan air secara berhemah supaya bekalan air dapat dipelihara untuk masa hadapan.", "Menggunakan air dengan banyak kerana bekalannya masih mencukupi pada hari ini.", "Menggunakan semula air hanya apabila bekalan air hampir habis.", "Menghentikan semua penggunaan air bagi mengelakkan pembaziran."], correctIndex: 0, explanation: "Penggunaan berhemah memastikan bekalan berterusan untuk masa depan." },
+            { id: 8, mission: "MAMPAN", word: "MAMPAN", difficulty: "SEDERHANA", text: "Pilih ayat yang menggunakan perkataan mampan dengan betul.", options: ["Amir menggunakan pembaris mampan untuk mengukur meja.", "Siti berlari secara mampan untuk memenangi perlumbaan dalam masa lima saat.", "Masyarakat perlu mengamalkan gaya hidup mampan demi kesejahteraan generasi akan datang.", "Ali menyimpan pensel mampan di dalam kotak penselnya."], correctIndex: 2, explanation: "Gaya hidup mampan menjaga keseimbangan alam untuk jangka panjang." },
+            { id: 9, mission: "MAMPAN", word: "MAMPAN", difficulty: "MUDAH", text: "Lengkapkan ayat berikut: Amalan kitar semula dapat membantu mewujudkan alam sekitar yang ______.", options: ["efisien", "mampan", "relevan", "segera"], correctIndex: 1, explanation: "Kitar semula mengekalkan kelestarian/kemampanan alam sekitar." },
+            { id: 10, mission: "MAMPAN", word: "MAMPAN", difficulty: "SUKAR", text: "Mengapakah penggunaan sumber alam secara mampan penting?", options: ["Supaya semua sumber alam dapat digunakan dalam masa yang singkat.", "Supaya manusia dapat menggunakan sumber alam tanpa sebarang had.", "Supaya sumber alam hanya dapat dinikmati oleh generasi sekarang.", "Supaya sumber alam terus tersedia dan dapat dinikmati oleh generasi akan datang."], correctIndex: 3, explanation: "Pengurusan mampan mengelakkan kehabisan sumber demi masa depan." },
+
+            // Misi 3 — MARCAPADA
+            { id: 11, mission: "MARCAPADA", word: "MARCAPADA", difficulty: "MUDAH", text: "Apakah maksud perkataan marcapada?", options: ["Zaman yang telah berlalu.", "Dunia khayalan yang dicipta manusia.", "Dunia pada masa kini.", "Masa hadapan yang belum tiba."], correctIndex: 2, explanation: "Marcapada bermaksud alam nyata atau dunia pada masa sekarang." },
+            { id: 12, mission: "MARCAPADA", word: "MARCAPADA", difficulty: "SEDERHANA", text: "Pilih ayat yang menggunakan perkataan marcapada dengan betul.", options: ["Marcapada, teknologi semakin berkembang pesat.", "Marcapada, manusia hidup pada zaman purba.", "Marcapada, semua teknologi akan hilang pada masa hadapan.", "Marcapada, manusia hanya menggunakan peralatan tradisional sejak dahulu."], correctIndex: 0, explanation: "Digunakan bagi menggambarkan keadaan dunia era sekarang." },
+            { id: 13, mission: "MARCAPADA", word: "MARCAPADA", difficulty: "SEDERHANA", text: "Perkataan marcapada paling sesuai digunakan untuk membincangkan perkara yang berkaitan dengan ______.", options: ["peristiwa yang berlaku beratus-ratus tahun dahulu sahaja.", "kehidupan manusia pada masa kini.", "cerita dongeng yang tidak berkaitan dengan kehidupan sebenar.", "ramalan tentang perkara yang belum berlaku sahaja."], correctIndex: 1, explanation: "Marcapada merujuk kepada isu/kehidupan dunia semasa." },
+            { id: 14, mission: "MARCAPADA", word: "MARCAPADA", difficulty: "MUDAH", text: "Lengkapkan ayat berikut: Dalam era ______, penggunaan kecerdasan buatan semakin meluas.", options: ["silam", "purba", "lampau", "marcapada"], correctIndex: 3, explanation: "Era marcapada ialah era dunia sekarang." },
+            { id: 15, mission: "MARCAPADA", word: "MARCAPADA", difficulty: "SUKAR", text: "Mengapakah perkataan marcapada sesuai digunakan dalam karangan tentang perkembangan teknologi?", options: ["Kerana perkataan itu merujuk kepada dunia pada zaman dahulu sahaja.", "Kerana perkataan itu bermaksud tempat untuk menyimpan teknologi.", "Kerana perkataan itu merujuk kepada dunia pada masa kini, ketika teknologi terus berkembang.", "Kerana perkataan itu bermaksud teknologi yang belum dicipta."], correctIndex: 2, explanation: "Teknologi berkembang pesat dalam dunia masa kini (marcapada)." },
+
+            // Misi 4 — INISIATIF
+            { id: 16, mission: "INISIATIF", word: "INISIATIF", difficulty: "MUDAH", text: "Apakah maksud perkataan inisiatif?", options: ["Usaha atau tindakan yang dilakukan untuk mencapai sesuatu tujuan.", "Hasil yang diperoleh selepas sesuatu usaha berjaya.", "Masalah yang timbul apabila sesuatu rancangan gagal.", "Arahan yang diberikan tanpa sebarang tindakan susulan."], correctIndex: 0, explanation: "Inisiatif bermaksud daya usaha atau langkah mula untuk melakukan sesuatu." },
+            { id: 17, mission: "INISIATIF", word: "INISIATIF", difficulty: "SEDERHANA", text: "Yang manakah menunjukkan inisiatif seorang murid?", options: ["Menunggu guru menyuruhnya mengutip sampah yang berselerak.", "Membiarkan rakan membersihkan kelas seorang diri.", "Mengadu tentang kelas yang kotor tanpa berbuat apa-apa.", "Mengajak rakan mengadakan kempen kebersihan kelas atas usaha sendiri."], correctIndex: 3, explanation: "Mengambil langkah sendiri tanpa perlu diarahkan adalah satu inisiatif." },
+            { id: 18, mission: "INISIATIF", word: "INISIATIF", difficulty: "SEDERHANA", text: "Pilih ayat yang menggunakan perkataan inisiatif dengan betul.", options: ["Inisiatif itu mempunyai berat dua kilogram.", "Pihak sekolah mengambil inisiatif untuk menggalakkan murid membaca.", "Ibu menggunakan inisiatif untuk mengukur suhu badan.", "Adik menyimpan inisiatif di dalam beg sekolah."], correctIndex: 1, explanation: "Mengambil inisiatif bermaksud memulakan langkah/usaha positif." },
+            { id: 19, mission: "INISIATIF", word: "INISIATIF", difficulty: "MUDAH", text: "Lengkapkan ayat berikut: Ali mengambil ______ untuk membantu rakan-rakannya memahami pelajaran dengan mengadakan sesi belajar bersama-sama.", options: ["ukuran", "halangan", "inisiatif", "alasan"], correctIndex: 2, explanation: "Ali memulakan langkah/inisiatif murni untuk membantu rakan." },
+            { id: 20, mission: "INISIATIF", word: "INISIATIF", difficulty: "SUKAR", text: "Mengapakah seseorang perlu mengambil inisiatif?", options: ["Supaya semua masalah dapat diserahkan kepada orang lain.", "Supaya sesuatu perkara boleh ditangguhkan sehingga saat akhir.", "Supaya seseorang tidak perlu bertanggungjawab terhadap tindakannya.", "Supaya usaha dapat dimulakan untuk mencapai sesuatu tujuan atau menyelesaikan masalah."], correctIndex: 3, explanation: "Inisiatif penting untuk mengerakkan jalan penyelesaian sesuatu isu." },
+
+            // Misi 5 — EFISIEN
+            { id: 21, mission: "EFISIEN", word: "EFISIEN", difficulty: "MUDAH", text: "Apakah maksud perkataan efisien?", options: ["Melakukan sesuatu dengan baik dan cepat tanpa pembaziran.", "Melakukan sesuatu dengan teliti walaupun menggunakan banyak masa dan sumber.", "Menyiapkan sesuatu dengan cepat tanpa mengambil kira hasilnya.", "Melakukan sesuatu mengikut arahan tanpa memahami tujuannya."], correctIndex: 0, explanation: "Efisien bermaksud cekap, produktif, serta mengelakkan pembaziran masa dan tenaga." },
+            { id: 22, mission: "EFISIEN", word: "EFISIEN", difficulty: "SEDERHANA", text: "Yang manakah menunjukkan pengurusan masa yang efisien?", options: ["Menyiapkan tugasan dengan tergesa-gesa sehingga banyak kesalahan.", "Membuat jadual dan menyelesaikan tugasan mengikut keutamaan.", "Menghabiskan masa memilih alat tulis sebelum memulakan tugasan.", "Melakukan semua tugasan serentak tanpa sebarang perancangan."], correctIndex: 1, explanation: "Pengurusan teratur mengikut keutamaan menjimatkan masa dan berkualiti." },
+            { id: 23, mission: "EFISIEN", word: "EFISIEN", difficulty: "SEDERHANA", text: "Pilih ayat yang menggunakan perkataan efisien dengan betul.", options: ["Meja itu efisien kerana mempunyai empat kaki.", "Cuaca hari ini efisien kerana hujan turun dengan lebat.", "Penggunaan aplikasi tersebut menjadikan pengurusan rekod lebih efisien.", "Bangunan itu efisien kerana dicat dengan warna hijau."], correctIndex: 2, explanation: "Aplikasi memudahkan dan mempercepat sistem pengurusan rekod secara cekap." },
+            { id: 24, mission: "EFISIEN", word: "EFISIEN", difficulty: "MUDAH", text: "Lengkapkan ayat berikut: Penggunaan mesin moden membantu pekerja menjalankan tugas dengan lebih ______.", options: ["mampan", "relevan", "marcapada", "efisien"], correctIndex: 3, explanation: "Mesin meningkatkan kecekapan (efisiensi) kerja." },
+            { id: 25, mission: "EFISIEN", word: "EFISIEN", difficulty: "SUKAR", text: "Apakah perbezaan antara melakukan sesuatu secara cepat dengan melakukan sesuatu secara efisien?", options: ["Kedua-duanya sentiasa memberikan hasil yang sama.", "Melakukan sesuatu secara efisien bermaksud menyiapkannya dengan baik sambil mengelakkan pembaziran masa dan sumber.", "Melakukan sesuatu secara efisien bermaksud menyiapkannya secepat mungkin walaupun hasilnya kurang baik.", "Melakukan sesuatu secara efisien bermaksud menggunakan sumber sebanyak mungkin untuk mendapatkan hasil."], correctIndex: 1, explanation: "Efisien mementingkan kedua-dua aspek: kualiti hasil dan jimat sumber." },
+
+            // Misi 6 — RELEVAN
+            { id: 26, mission: "RELEVAN", word: "RELEVAN", difficulty: "MUDAH", text: "Apakah maksud perkataan relevan?", options: ["Sesuatu yang paling popular dalam kalangan masyarakat.", "Sesuatu yang sukar difahami oleh kebanyakan orang.", "Sesuatu yang berkaitan atau sesuai dengan perkara yang dibincangkan.", "Sesuatu yang mempunyai banyak maklumat tambahan."], correctIndex: 2, explanation: "Relevan bermaksud ada kaitan langsung, sesuai atau munasabah." },
+            { id: 27, mission: "RELEVAN", word: "RELEVAN", difficulty: "SEDERHANA", text: "Maklumat manakah yang relevan untuk karangan bertajuk “Kepentingan Menjaga Kebersihan”?", options: ["Cara-cara mengurus wang saku.", "Sejarah penciptaan telefon pintar.", "Tempat-tempat menarik untuk dilawati ketika cuti sekolah.", "Kebaikan menjaga kebersihan terhadap kesihatan manusia."], correctIndex: 3, explanation: "Hanya isu kesihatan dan kebersihan yang berkait (relevan) dengan tajuk." },
+            { id: 28, mission: "RELEVAN", word: "RELEVAN", difficulty: "SEDERHANA", text: "Pilih ayat yang menggunakan perkataan relevan dengan betul.", options: ["Guru memberikan contoh yang relevan dengan kehidupan harian murid.", "Adik menggunakan relevan untuk mengukur panjang meja.", "Ayah membeli sebuah kereta yang relevan di kedai.", "Murid menyimpan relevan di dalam beg sekolah."], correctIndex: 0, explanation: "Contoh yang diberikan berkait rapat dengan topik perbincangan." },
+            { id: 29, mission: "RELEVAN", word: "RELEVAN", difficulty: "MUDAH", text: "Lengkapkan ayat berikut: Murid perlu memilih isi yang ______ dengan tajuk karangan supaya penulisan mereka tidak terpesong.", options: ["efisien", "relevan", "mampan", "segera"], correctIndex: 1, explanation: "Isi penulisan mesti sesuai dan berkait (relevan) dengan tajuk." },
+            { id: 30, mission: "RELEVAN", word: "RELEVAN", difficulty: "SUKAR", text: "Mengapakah maklumat yang relevan penting ketika menulis karangan?", options: ["Supaya karangan menjadi panjang walaupun isi tidak berkaitan.", "Supaya penulis boleh memasukkan semua maklumat yang ditemuinya.", "Supaya isi penulisan menepati tajuk dan membantu menyampaikan idea dengan jelas.", "Supaya penulis dapat mengelakkan penggunaan contoh dalam karangan."], correctIndex: 2, explanation: "Maklumat relevan memastikan penulisan fokus dan menepati kehendak soalan." }
+        ];
+
+        /* -------------------------------------------------------------------------
+         * BAHAGIAN 2: STATE & VARIABEL GLOBAL PERMAINAN
+         * ------------------------------------------------------------------------- */
+        let scoreA = 0;
+        let scoreB = 0;
+        let answeredQuestionsCount = 0;
+        let totalCorrectAnswers = 0;
+
+        let currentQuestion = null;
+        let currentOptions = []; // shuffled options array
+        let activeTeam = null; // 'A' or 'B'
+        let isOpponentChance = false;
+
+        let timerInterval = null;
+        let timerSeconds = 10;
+        let isTimerRunning = false;
+        let roundLocked = false;
+
+        let audioEnabled = true;
+        let speechEnabled = true;
+
+        let usedQuestionIds = new Set();
+        let selectedMission = "SEMUA";
+
+        // Landing floating showcase words
+        const SHOWCASE_WORDS = ["WADAH", "MAMPAN", "MARCAPADA", "INISIATIF", "EFISIEN", "RELEVAN"];
+        let showcaseIdx = 0;
+        setInterval(() => {
+            showcaseIdx = (showcaseIdx + 1) % SHOWCASE_WORDS.length;
+            const el = document.getElementById('landingFloatingWord');
+            if(el) el.textContent = SHOWCASE_WORDS[showcaseIdx];
+        }, 3000);
+
+        /* -------------------------------------------------------------------------
+         * BAHAGIAN 3: AUDIO SYNTHESIZER (WEB AUDIO API)
+         * ------------------------------------------------------------------------- */
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new AudioCtx();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        function playSound(type) {
+            if (!audioEnabled) return;
+            initAudio();
+
+            const now = audioCtx.currentTime;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.08);
+                gain.gain.setValueAtTime(0.15, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } 
+            else if (type === 'start') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.4);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            } 
+            else if (type === 'scan') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(200, now);
+                osc.frequency.linearRampToValueAtTime(1200, now + 0.3);
+                gain.gain.setValueAtTime(0.1, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } 
+            else if (type === 'buzzer') {
+                osc.type = 'square';
+                osc.frequency.setValueAtTime(440, now);
+                osc.frequency.setValueAtTime(880, now + 0.1);
+                gain.gain.setValueAtTime(0.25, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } 
+            else if (type === 'warning') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(800, now);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.12);
+                osc.start(now);
+                osc.stop(now + 0.12);
+            } 
+            else if (type === 'correct') {
+                // Arpeggio kemenangan
+                const notes = [523.25, 659.25, 783.99, 1046.50]; // C5, E5, G5, C6
+                notes.forEach((freq, idx) => {
+                    const noteOsc = audioCtx.createOscillator();
+                    const noteGain = audioCtx.createGain();
+                    noteOsc.connect(noteGain);
+                    noteGain.connect(audioCtx.destination);
+                    noteOsc.type = 'sine';
+                    noteOsc.frequency.setValueAtTime(freq, now + (idx * 0.08));
+                    noteGain.gain.setValueAtTime(0.2, now + (idx * 0.08));
+                    noteGain.gain.linearRampToValueAtTime(0.01, now + (idx * 0.08) + 0.25);
+                    noteOsc.start(now + (idx * 0.08));
+                    noteOsc.stop(now + (idx * 0.08) + 0.25);
+                });
+            } 
+            else if (type === 'wrong') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(220, now);
+                osc.frequency.linearRampToValueAtTime(140, now + 0.3);
+                gain.gain.setValueAtTime(0.2, now);
+                gain.gain.linearRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            } 
+            else if (type === 'victory') {
+                // Melodi kemenangan ringkas bernada Gong / Bell
+                const victoryNotes = [392.00, 440.00, 523.25, 587.33, 659.25];
+                victoryNotes.forEach((freq, idx) => {
+                    const vOsc = audioCtx.createOscillator();
+                    const vGain = audioCtx.createGain();
+                    vOsc.connect(vGain);
+                    vGain.connect(audioCtx.destination);
+                    vOsc.type = 'triangle';
+                    vOsc.frequency.setValueAtTime(freq, now + (idx * 0.15));
+                    vGain.gain.setValueAtTime(0.25, now + (idx * 0.15));
+                    vGain.gain.exponentialRampToValueAtTime(0.001, now + (idx * 0.15) + 0.6);
+                    vOsc.start(now + (idx * 0.15));
+                    vOsc.stop(now + (idx * 0.15) + 0.6);
+                });
+            }
+        }
+
+        /* Web Speech API Synthesis */
+        function speakText(text) {
+            if (!speechEnabled || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel(); // Stop current speech
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'ms-MY';
+            utterance.rate = 1.0;
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function toggleAudio() {
+            audioEnabled = !audioEnabled;
+            document.getElementById('audioText').textContent = audioEnabled ? 'AUDIO: ON' : 'AUDIO: OFF';
+            document.getElementById('audioIcon').textContent = audioEnabled ? '🔊' : '🔇';
+        }
+
+        function toggleSpeech() {
+            speechEnabled = !speechEnabled;
+            document.getElementById('speechText').textContent = speechEnabled ? 'SUARA: ON' : 'SUARA: OFF';
+        }
+
+        /* -------------------------------------------------------------------------
+         * BAHAGIAN 4: LOGIK PERMAINAN & PERALIHAN SKRIN
+         * ------------------------------------------------------------------------- */
+        function startGame() {
+            initAudio();
+            playSound('start');
+            speakText("Selamat datang ke Duo Kosa Kata AR Bell Battle. Mula misi!");
+
+            document.getElementById('screenLanding').classList.add('hidden');
+            document.getElementById('screenGame').classList.remove('hidden');
+            document.getElementById('screenGame').classList.add('flex');
+
+            renderMissionGrid();
+            updateScoreDisplay();
+        }
+
+        function goToHome() {
+            playSound('click');
+            document.getElementById('screenEnd').classList.add('hidden');
+            document.getElementById('screenGame').classList.add('hidden');
+            document.getElementById('screenLanding').classList.remove('hidden');
+        }
+
+        function renderMissionGrid() {
+            const grid = document.getElementById('missionGrid');
+            grid.innerHTML = '';
+
+            const missions = [
+                { name: "WADAH", count: 5 },
+                { name: "MAMPAN", count: 5 },
+                { name: "MARCAPADA", count: 5 },
+                { name: "INISIATIF", count: 5 },
+                { name: "EFISIEN", count: 5 },
+                { name: "RELEVAN", count: 5 }
+            ];
+
+            missions.forEach(m => {
+                const btn = document.createElement('button');
+                const isSelected = selectedMission === m.name;
+                btn.className = `p-2 rounded-lg text-xs font-bold border transition text-center ${
+                    isSelected 
+                        ? 'bg-royalGold text-emeraldDark border-royalGoldBright shadow-md' 
+                        : 'bg-emeraldDark/80 text-softCream border-royalGold/30 hover:border-royalGold'
+                }`;
+                btn.innerHTML = `<div>${m.name}</div><div class="text-[9px] opacity-75">5 Soalan</div>`;
+                btn.onclick = () => {
+                    playSound('click');
+                    selectedMission = m.name;
+                    renderMissionGrid();
+                    document.getElementById('currentMissionTag').textContent = `MISI: ${selectedMission}`;
+                };
+                grid.appendChild(btn);
+            });
+        }
+
+        function selectRandomMission() {
+            const missions = ["WADAH", "MAMPAN", "MARCAPADA", "INISIATIF", "EFISIEN", "RELEVAN"];
+            selectedMission = missions[Math.floor(Math.random() * missions.length)];
+            renderMissionGrid();
+            document.getElementById('currentMissionTag').textContent = `MISI: ${selectedMission}`;
+            playSound('click');
+        }
+
+        /* -------------------------------------------------------------------------
+         * BAHAGIAN 5: ALIRAN PUSINGAN SOALAN & LOCENG
+         * ------------------------------------------------------------------------- */
+        function loadNextQuestion() {
+            playSound('scan');
+            resetTimer();
+
+            // Filter available questions
+            let available = QUESTION_BANK.filter(q => !usedQuestionIds.has(q.id));
+            if (selectedMission !== "SEMUA") {
+                available = available.filter(q => q.mission === selectedMission);
+            }
+
+            if (available.length === 0) {
+                // If selected mission has no questions left, check overall
+                const remainingOverall = QUESTION_BANK.filter(q => !usedQuestionIds.has(q.id));
+                if (remainingOverall.length === 0) {
+                    alert("Semua soalan dalam bank soalan telah dijawab!");
+                    endGame();
+                    return;
+                } else {
+                    alert(`Semua soalan untuk Misi ${selectedMission} telah selesai! Beralih ke soalan seterusnya.`);
+                    available = remainingOverall;
+                }
+            }
+
+            // Pick random question from filtered list
+            currentQuestion = available[Math.floor(Math.random() * available.length)];
+            usedQuestionIds.add(currentQuestion.id);
+
+            // Shuffle Options (A, B, C, D) dynamically without breaking correct pairing
+            const originalCorrectText = currentQuestion.options[currentQuestion.correctIndex];
+            const optionsCopy = [...currentQuestion.options];
+            
+            // Fisher-Yates shuffle
+            for (let i = optionsCopy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [optionsCopy[i], optionsCopy[j]] = [optionsCopy[j], optionsCopy[i]];
+            }
+
+            currentOptions = optionsCopy.map(text => ({
+                text: text,
+                isCorrect: text === originalCorrectText
+            }));
+
+            // Reset Round State
+            activeTeam = null;
+            isOpponentChance = false;
+            roundLocked = false;
+
+            // Update UI Displays
+            document.getElementById('badgeDifficulty').textContent = currentQuestion.difficulty;
+            document.getElementById('badgeTargetWord').textContent = `SASARAN: ${currentQuestion.word}`;
+            document.getElementById('questionText').textContent = currentQuestion.text;
+            document.getElementById('explanationBox').classList.add('hidden');
+
+            renderOptionsUI();
+
+            // Enable Teacher Bell Controls
+            document.getElementById('btnBellA').disabled = false;
+            document.getElementById('btnBellB').disabled = false;
+            document.getElementById('btnOpponentTry').disabled = true;
+
+            document.getElementById('gameStatusNotice').textContent = "TEKAN LOCENG UNTUK MEREBUT PELUANG MENJAWAB!";
+            document.getElementById('gameStatusNotice').className = "text-center text-lg font-bold text-royalGoldBright py-1 bg-emeraldDark/60 rounded-lg border border-royalGold/40 animate-pulse";
+
+            speakText(`Soalan seterusnya. Sasaran ${currentQuestion.word}. Sila tekan loceng untuk menjawab.`);
+        }
+
+        function renderOptionsUI() {
+            const grid = document.getElementById('optionsGrid');
+            grid.innerHTML = '';
+
+            const prefixes = ['A', 'B', 'C', 'D'];
+
+            currentOptions.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.id = `optBtn_${idx}`;
+                btn.disabled = true; // Disabled until teacher selects bell winner
+                btn.className = `p-4 rounded-xl border text-left font-semibold transition flex items-start gap-3 bg-emeraldDark/70 border-neonGreen/30 text-softCream hover:bg-emeraldMain disabled:opacity-60 disabled:cursor-not-allowed`;
+                btn.innerHTML = `
+                    <span class="w-7 h-7 rounded-lg bg-royalGold/20 border border-royalGold text-royalGoldBright flex items-center justify-center font-bold text-sm shrink-0">${prefixes[idx]}</span>
+                    <span class="text-sm md:text-base leading-snug">${opt.text}</span>
+                `;
+                btn.onclick = () => selectOption(idx);
+                grid.appendChild(btn);
+            });
+        }
+
+        function registerBellWinner(team) {
+            if (roundLocked) return;
+            playSound('buzzer');
+
+            activeTeam = team;
+            document.getElementById('btnBellA').disabled = true;
+            document.getElementById('btnBellB').disabled = true;
+
+            // Enable options for answering
+            currentOptions.forEach((_, idx) => {
+                const btn = document.getElementById(`optBtn_${idx}`);
+                if (btn) btn.disabled = false;
+            });
+
+            const teamName = team === 'A' ? "PASUKAN A (HIJAU ZAMRUD)" : "PASUKAN B (EMAS DIRAJA)";
+            const statusNotice = document.getElementById('gameStatusNotice');
+            statusNotice.textContent = `⚡ BUZZER ACTIVATED! GILIRAN ${teamName}!`;
+            statusNotice.className = team === 'A' 
+                ? "text-center text-lg font-bold text-neonGreen py-1 bg-emeraldDark/80 rounded-lg border border-neonGreen"
+                : "text-center text-lg font-bold text-royalGoldBright py-1 bg-emeraldDark/80 rounded-lg border border-royalGoldBright";
+
+            speakText(`Buzzer diaktifkan! Pasukan ${team}, giliran anda.`);
+
+            // Start 10 seconds timer
+            startTimer(10);
+        }
+
+        /* -------------------------------------------------------------------------
+         * BAHAGIAN 6: JAWAPAN & PEMARKAHAN
+         * ------------------------------------------------------------------------- */
+        function selectOption(index) {
+            if (roundLocked) return;
+            stopTimer();
+            roundLocked = true;
+
+            // Lock all option buttons
+            currentOptions.forEach((_, idx) => {
+                const btn = document.getElementById(`optBtn_${idx}`);
+                if (btn) btn.disabled = true;
+            });
+
+            const selectedOpt = currentOptions[index];
+            const btnSelected = document.getElementById(`optBtn_${index}`);
+
+            if (selectedOpt.isCorrect) {
+                // Jawapan BETUL
+                playSound('correct');
+                btnSelected.classList.remove('bg-emeraldDark/70', 'border-neonGreen/30');
+                btnSelected.classList.add('bg-emerald-800', 'border-neonGreen', 'ring-2', 'ring-neonGreen');
+
+                const points = isOpponentChance ? 5 : 10;
+                if (activeTeam === 'A') scoreA += points;
+                else if (activeTeam === 'B') scoreB += points;
+
+                updateScoreDisplay();
+                answeredQuestionsCount++;
+                totalCorrectAnswers++;
+                document.getElementById('questionsAnsweredCount').textContent = answeredQuestionsCount;
+
+                document.getElementById('gameStatusNotice').textContent = `✨ TEPAT! TAHNIAH PASUKAN ${activeTeam} (+${points} MATA)!`;
+                document.getElementById('gameStatusNotice').className = "text-center text-lg font-bold text-neonGreen py-1 bg-emeraldDark/90 rounded-lg border border-neonGreen shadow-lg";
+
+                showExplanation();
+                speakText(`Tepat! Tahniah Pasukan ${activeTeam}, anda mendapat ${points} mata.`);
+
+            } else {
+                // Jawapan SALAH
+                playSound('wrong');
+                btnSelected.classList.remove('bg-emeraldDark/70');
+                btnSelected.classList.add('bg-red-900/80', 'border-red-500', 'shake-error');
+
+                if (!isOpponentChance) {
+                    // Peluang mencuri mata diberikan kepada pasukan lawan
+                    document.getElementById('gameStatusNotice').textContent = "❌ BELUM TEPAT! TEKAN 'PASUKAN LAWAN CUBA!' UNTUK CURI MATA!";
+                    document.getElementById('gameStatusNotice').className = "text-center text-lg font-bold text-amber-400 py-1 bg-emeraldDark/90 rounded-lg border border-amber-500";
+                    document.getElementById('btnOpponentTry').disabled = false;
+                    speakText("Belum tepat! Peluang diberikan kepada pasukan lawan untuk mencuri mata.");
+                } else {
+                    // Kerosakan peluang kedua / kedua-dua salah
+                    document.getElementById('gameStatusNotice').textContent = "❌ KEDUA-DUA PASUKAN GAGAL MENJAWAB TEPAT.";
+                    document.getElementById('gameStatusNotice').className = "text-center text-lg font-bold text-red-400 py-1 bg-emeraldDark/90 rounded-lg border border-red-500";
+                    answeredQuestionsCount++;
+                    document.getElementById('questionsAnsweredCount').textContent = answeredQuestionsCount;
+                    highlightCorrectOption();
+                    showExplanation();
+                }
+            }
+        }
+
+        function allowOpponentTry() {
+            playSound('click');
+            document.getElementById('btnOpponentTry').disabled = true;
+
+            // Switch active team
+            activeTeam = (activeTeam === 'A') ? 'B' : 'A';
+            isOpponentChance = true;
+            roundLocked = false;
+
+            // Re-enable remaining unselected buttons
+            currentOptions.forEach((_, idx) => {
+                const btn = document.getElementById(`optBtn_${idx}`);
+                if (btn && !btn.classList.contains('bg-red-900/80')) {
+                    btn.disabled = false;
+                }
+            });
+
+            const teamName = activeTeam === 'A' ? "PASUKAN A" : "PASUKAN B";
+            document.getElementById('gameStatusNotice').textContent = `⚡ CURI MATA! ${teamName}, ANDA MEMPUNYAI 5 SAAT!`;
+            document.getElementById('gameStatusNotice').className = "text-center text-lg font-bold text-amber-300 py-1 bg-emeraldDark/90 rounded-lg border border-amber-400 animate-pulse";
+
+            speakText(`Masa mencuri mata. ${teamName}, giliran anda dalam lima saat.`);
+            startTimer(5);
+        }
+
+        function highlightCorrectOption() {
+            currentOptions.forEach((opt, idx) => {
+                if (opt.isCorrect) {
+                    const btn = document.getElementById(`optBtn_${idx}`);
+                    if (btn) {
+                        btn.classList.remove('bg-emeraldDark/70');
+                        btn.classList.add('bg-emerald-700', 'border-royalGoldBright', 'ring-2', 'ring-royalGoldBright');
+                    }
+                }
+            });
+        }
+
+        function showExplanation() {
+            if (!currentQuestion) return;
+            const box = document.getElementById('explanationBox');
+            const txt = document.getElementById('explanationText');
+            txt.textContent = currentQuestion.explanation;
+            box.classList.remove('hidden');
+        }
+
+        /* -------------------------------------------------------------------------
+         * BAHAGIAN 7: PEMASA & ANIMASI
+         * ------------------------------------------------------------------------- */
+        function startTimer(seconds) {
+            stopTimer();
+            timerSeconds = seconds;
+            updateTimerUI();
+            isTimerRunning = true;
+
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerUI();
+
+                if (timerSeconds <= 3 && timerSeconds > 0) {
+                    playSound('warning');
+                }
+
+                if (timerSeconds <= 0) {
+                    stopTimer();
+                    handleTimeOut();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
+            isTimerRunning = false;
+        }
+
+        function resetTimer() {
+            stopTimer();
+            timerSeconds = 10;
+            document.getElementById('timerDisplay').textContent = "10s";
+            document.getElementById('timerDisplay').className = "text-3xl md:text-4xl font-black text-royalGoldBright font-mono";
+            document.getElementById('timerStatusLabel').textContent = "MENUNGGU REBUTAN";
+        }
+
+        function updateTimerUI() {
+            const display = document.getElementById('timerDisplay');
+            display.textContent = `${timerSeconds}s`;
+
+            if (timerSeconds <= 3) {
+                display.className = "text-3xl md:text-4xl font-black text-red-500 font-mono animate-ping";
+            } else {
+                display.className = "text-3xl md:text-4xl font-black text-royalGoldBright font-mono";
+            }
+            document.getElementById('timerStatusLabel').textContent = "BERJALAN";
+        }
+
+        function handleTimeOut() {
+            roundLocked = true;
+            playSound('wrong');
+
+            // Lock options
+            currentOptions.forEach((_, idx) => {
+                const btn = document.getElementById(`optBtn_${idx}`);
+                if (btn) btn.disabled = true;
+            });
+
+            if (!isOpponentChance) {
+                document.getElementById('gameStatusNotice').textContent = "⏰ MASA TAMAT! TEKAN 'PASUKAN LAWAN CUBA!' UNTUK CURI MATA!";
+                document.getElementById('gameStatusNotice').className = "text-center text-lg font-bold text-amber-400 py-1 bg-emeraldDark/90 rounded-lg border border-amber-500";
+                document.getElementById('btnOpponentTry').disabled = false;
+            } else {
+                document.getElementById('gameStatusNotice').textContent = "⏰ MASA TAMAT! TIADA MATA DIBERIKAN.";
+                document.getElementById('gameStatusNotice').className = "text-center text-lg font-bold text-red-400 py-1 bg-emeraldDark/90 rounded-lg border border-red-500";
+                answeredQuestionsCount++;
+                document.getElementById('questionsAnsweredCount').textContent = answeredQuestionsCount;
+                highlightCorrectOption();
+                showExplanation();
+            }
+        }
+
+        function updateScoreDisplay() {
+            document.getElementById('scoreA').textContent = scoreA;
+            document.getElementById('scoreB').textContent = scoreB;
+        }
+
+        /* -------------------------------------------------------------------------
+         * BAHAGIAN 8: KAWALAN GURU & SKRIN PENUTUP
+         * ------------------------------------------------------------------------- */
+        function confirmShowAnswer() {
+            if (confirm("Adakah anda pasti untuk memaparkan jawapan betul bagi soalan ini?")) {
+                highlightCorrectOption();
+                showExplanation();
+                playSound('click');
+            }
+        }
+
+        function confirmResetRound() {
+            if (confirm("Adakah anda pasti untuk mengulang pusingan ini? Soalan yang sama akan dimuatkan semula.")) {
+                if (currentQuestion) {
+                    usedQuestionIds.delete(currentQuestion.id);
+                }
+                loadNextQuestion();
+            }
+        }
+
+        function confirmEndGame() {
+            if (confirm("Adakah anda pasti untuk menamatkan permainan sekarang dan memaparkan keputusan muktamad?")) {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            stopTimer();
+            playSound('victory');
+
+            document.getElementById('screenGame').classList.add('hidden');
+            document.getElementById('screenEnd').classList.remove('hidden');
+
+            document.getElementById('finalScoreA').textContent = scoreA;
+            document.getElementById('finalScoreB').textContent = scoreB;
+            document.getElementById('finalQuestionsCount').textContent = answeredQuestionsCount;
+            document.getElementById('finalCorrectCount').textContent = totalCorrectAnswers;
+
+            const winnerText = document.getElementById('winnerText');
+            if (scoreA > scoreB) {
+                winnerText.textContent = "🏆 TAHNIAH, PASUKAN A (HIJAU ZAMRUD) MENANG!";
+                winnerText.className = "text-2xl md:text-3xl font-extrabold text-neonGreen my-4 p-4 rounded-xl bg-emeraldDark border border-neonGreen";
+                speakText("Tahniah Pasukan A, anda adalah pemenang!");
+            } else if (scoreB > scoreA) {
+                winnerText.textContent = "🏆 TAHNIAH, PASUKAN B (EMAS DIRAJA) MENANG!";
+                winnerText.className = "text-2xl md:text-3xl font-extrabold text-royalGoldBright my-4 p-4 rounded-xl bg-emeraldDark border border-royalGoldBright";
+                speakText("Tahniah Pasukan B, anda adalah pemenang!");
+            } else {
+                winnerText.textContent = "🤝 KEDUA-DUA PASUKAN HEBAT! KEPUTUSAN SERI!";
+                winnerText.className = "text-2xl md:text-3xl font-extrabold text-softCream my-4 p-4 rounded-xl bg-emeraldDark border border-softCream";
+                speakText("Keputusan seri. Kedua-dua pasukan sangat hebat!");
+            }
+        }
+
+        function resetGame() {
+            scoreA = 0;
+            scoreB = 0;
+            answeredQuestionsCount = 0;
+            totalCorrectAnswers = 0;
+            usedQuestionIds.clear();
+
+            updateScoreDisplay();
+            document.getElementById('questionsAnsweredCount').textContent = "0";
+
+            document.getElementById('screenEnd').classList.add('hidden');
+            document.getElementById('screenGame').classList.remove('hidden');
+
+            loadNextQuestion();
+        }
+
+        // Initialize state on window load
+        window.onload = function() {
+            renderMissionGrid();
+        };
+    </script>
+</body>
+</html>
